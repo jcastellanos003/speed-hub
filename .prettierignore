@@ -1,0 +1,12 @@
+*.snap
+build
+node_modules
+android
+ios
+src/assets
+src/generated
+src/proto
+.DS_Store
+commitlint.config.js
+src/_design-system/**/assets
+convex/_generated
