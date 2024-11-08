@@ -1,11 +1,14 @@
-/**
- * Learn more about Light and Dark modes:
- * https://docs.expo.io/guides/color-schemes/
- */
+import React from 'react';
+
+import {
+  SafeAreaView as DefaultSafeAreaView,
+  SafeAreaViewProps as DefaultSafeAreaViewProps,
+} from 'react-native-safe-area-context';
 
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 
 import Colors from '@/constants/Colors';
+
 import { useColorScheme } from './useColorScheme';
 
 type ThemeProps = {
@@ -15,6 +18,7 @@ type ThemeProps = {
 
 export type TextProps = ThemeProps & DefaultText['props'];
 export type ViewProps = ThemeProps & DefaultView['props'];
+export type SafeAreaViewProps = ThemeProps & DefaultSafeAreaViewProps;
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -39,7 +43,26 @@ export function Text(props: TextProps) {
 
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    'background'
+  );
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function SafeAreaView(props: SafeAreaViewProps) {
+  const { style, edges, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    'background'
+  );
+
+  return (
+    <DefaultSafeAreaView
+      style={[{ backgroundColor }, style]}
+      edges={edges} // Exclude the bottom safe area
+      {...otherProps}
+    />
+  );
 }

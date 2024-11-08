@@ -1,31 +1,49 @@
-import { StyleSheet } from 'react-native';
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
+import { useQuery } from 'convex/react';
+import { Link } from 'expo-router';
+
+import React, { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '@/components/EditScreenInfo';
+import { Separator } from '@/components/Separator';
 import { Text, View } from '@/components/Themed';
-
 import { api } from '@/convex/_generated/api';
-import { useQuery } from 'convex/react';
+
+// import { Redirect, Stack } from 'expo-router';
 
 export default function TabOneScreen() {
   const tasks = useQuery(api.tasks.get);
-  console.log('tasks list', tasks?.[0].isCompleted);
+  const { user /* , isSignedIn */ } = useUser();
+
+  /* if (isSignedIn) {
+    return <Redirect href={'/'} />;
+  } else {
+    <Stack />;
+  } */
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <Separator />
       <View>
         {tasks?.map(({ _id, text }) => <Text key={_id}>{text}</Text>)}
       </View>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <Separator />
       <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <SignedIn>
+        <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
+      </SignedIn>
+      <Link href="/signin">
+        <Text>Sign In</Text>
+      </Link>
+      <SignedOut>
+        <Link href="/signin">
+          <Text>Sign In</Text>
+        </Link>
+        <Link href="/signup">
+          <Text>Sign Up</Text>
+        </Link>
+      </SignedOut>
     </View>
   );
 }
@@ -39,10 +57,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });
