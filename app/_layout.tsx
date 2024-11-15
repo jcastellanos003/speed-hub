@@ -15,7 +15,8 @@ import { Stack } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 
-import { useColorScheme } from '@/components/useColorScheme';
+import { Routes } from '@/constants/Routes';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -109,10 +110,22 @@ function RootLayoutNav() {
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
           >
             <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-              <Stack.Screen name="signin" options={{ headerShown: false }} />
-              <Stack.Screen name="signup" options={{ headerShown: false }} />
+              <Stack.Screen
+                name={Routes.Home}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={Routes.Modal}
+                options={{ presentation: 'modal' }}
+              />
+              <Stack.Screen
+                name={Routes.SignIn}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={Routes.SignUp}
+                options={{ headerShown: false }}
+              />
             </Stack>
           </ThemeProvider>
         </ConvexProvider>

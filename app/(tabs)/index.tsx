@@ -1,19 +1,19 @@
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
+import { SignedIn, SignedOut, useAuth, useUser } from '@clerk/clerk-expo';
 import { useQuery } from 'convex/react';
 import { Link } from 'expo-router';
 
-import React, { StyleSheet } from 'react-native';
+import React, { StyleSheet, TouchableOpacity } from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
 import { Separator } from '@/components/Separator';
 import { Text, View } from '@/components/Themed';
 import { api } from '@/convex/_generated/api';
 
 // import { Redirect, Stack } from 'expo-router';
 
-export default function TabOneScreen() {
-  const tasks = useQuery(api.tasks.get);
+export default function HomeScreen() {
+  const tasks = useQuery(api.models.tasks.get);
   const { user /* , isSignedIn */ } = useUser();
+  const { signOut } = useAuth();
 
   /* if (isSignedIn) {
     return <Redirect href={'/'} />;
@@ -21,23 +21,33 @@ export default function TabOneScreen() {
     <Stack />;
   } */
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('error signing out', JSON.stringify(error, null, 2));
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>Home Screen</Text>
       <Separator />
       <View>
         {tasks?.map(({ _id, text }) => <Text key={_id}>{text}</Text>)}
       </View>
       <Separator />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
       <SignedIn>
         <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
       </SignedIn>
-      <Link href="/signin">
+      <Link href="/auth/sign-in">
         <Text>Sign In</Text>
       </Link>
+      <TouchableOpacity onPress={handleSignOut}>
+        <Text>Sign Out</Text>
+      </TouchableOpacity>
       <SignedOut>
-        <Link href="/signin">
+        <Link href="/auth/sign-in">
           <Text>Sign In</Text>
         </Link>
         <Link href="/signup">

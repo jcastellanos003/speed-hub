@@ -23,6 +23,7 @@ export default {
     separator: '#eee',
     buttonOutline: '#ccc',
     iconColor: '#333',
+    appleColor: '#000',
   },
   dark: {
     text: '#fff',
@@ -45,5 +46,6 @@ export default {
     separator: 'rgba(255,255,255,0.1)',
     buttonOutline: '#555',
     iconColor: '#444',
+    appleColor: '#fff',
   },
 };
